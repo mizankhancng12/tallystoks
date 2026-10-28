@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>দোকান ম্যানেজার - Shop & Stock Management</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <h1 class="logo">🛒 দোকান ম্যানেজার</h1>
+      <nav class="nav-links">
+        <button class="nav-btn active" data-target="dashboard">📊 ড্যাশবোর্ড</button>
+        <button class="nav-btn" data-target="products">📦 পণ্য</button>
+        <button class="nav-btn" data-target="stockin">➕ স্টক ইন</button>
+        <button class="nav-btn" data-target="stockout">➖ স্টক আউট</button>
+        <button class="nav-btn" data-target="hisab">💰 হিসাব-খাতা</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Dashboard -->
+    <section id="dashboard" class="page active">
+      <h2>📊 ড্যাশবোর্ড</h2>
+      <div class="stats-grid">
+        <div class="stat-card"><h3>মোট পণ্য</h3><p id="stat-products">0</p></div>
+        <div class="stat-card"><h3>মোট স্টক (পিস)</h3><p id="stat-stock">0</p></div>
+        <div class="stat-card"><h3>স্টক মূল্য (ক্রয়)</h3><p id="stat-stock-value">0</p></div>
+        <div class="stat-card"><h3>মোট বিক্রয়</h3><p id="stat-sales">0</p></div>
+        <div class="stat-card"><h3>মোট ক্রয়</h3><p id="stat-purchase">0</p></div>
+        <div class="stat-card"><h3>নিট ব্যালেন্স</h3><p id="stat-balance">0</p></div>
+        <div class="stat-card warning"><h3>কম স্টক (≤৫)</h3><p id="stat-low">0</p></div>
+      </div>
+
+      <h3>সাম্প্রতিক লেনদেন</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr><th>তারিখ</th><th>বিবরণ</th><th>ধরন</th><th>টাকা</th></tr>
+          </thead>
+          <tbody id="recent-transactions"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="page">
+      <h2>📦 পণ্য ব্যবস্থাপনা</h2>
+      <form id="product-form" class="card form-grid">
+        <input type="hidden" id="product-id" />
+        <div class="form-group">
+          <label for="p-name">পণ্যের নাম *</label>
+          <input type="text" id="p-name" required />
+        </div>
+        <div class="form-group">
+          <label for="p-cost">ক্রয় মূল্য (প্রতি ইউনিট) *</label>
+          <input type="number" id="p-cost" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="p-price">বিক্রয় মূল্য (প্রতি ইউনিট) *</label>
+          <input type="number" id="p-price" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="p-stock">স্টক পরিমাণ *</label>
+          <input type="number" id="p-stock" min="0" step="1" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">সংরক্ষণ করুন</button>
+          <button type="button" id="cancel-edit" class="btn secondary" style="display:none;">বাতিল</button>
+        </div>
+      </form>
+
+      <h3>পণ্যের তালিকা</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr><th>নাম</th><th>ক্রয় মূল্য</th><th>বিক্রয় মূল্য</th><th>স্টক</th><th>অ্যাকশন</th></tr>
+          </thead>
+          <tbody id="product-list"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Stock In -->
+    <section id="stockin" class="page">
+      <h2>➕ স্টক ইন (ক্রয়/জমা)</h2>
+      <form id="stockin-form" class="card form-grid">
+        <div class="form-group">
+          <label for="si-product">পণ্য নির্বাচন করুন *</label>
+          <select id="si-product" required></select>
+        </div>
+        <div class="form-group">
+          <label for="si-qty">পরিমাণ *</label>
+          <input type="number" id="si-qty" min="1" step="1" required />
+        </div>
+        <div class="form-group">
+          <label for="si-cost">ক্রয় মূল্য (প্রতি ইউনিট) *</label>
+          <input type="number" id="si-cost" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="si-date">তারিখ *</label>
+          <input type="date" id="si-date" required />
+        </div>
+        <div class="form-group full">
+          <label for="si-note">নোট (ঐচ্ছিক)</label>
+          <input type="text" id="si-note" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">স্টক যোগ করুন</button>
+        </div>
+      </form>
+
+      <h3>সাম্প্রতিক স্টক ইন</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead><tr><th>তারিখ</th><th>পণ্য</th><th>পরিমাণ</th><th>ক্রয় মূল্য</th><th>মোট খরচ</th></tr></thead>
+          <tbody id="stockin-list"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Stock Out -->
+    <section id="stockout" class="page">
+      <h2>➖ স্টক আউট (বিক্রয়)</h2>
+      <form id="stockout-form" class="card form-grid">
+        <div class="form-group">
+          <label for="so-product">পণ্য নির্বাচন করুন *</label>
+          <select id="so-product" required></select>
+        </div>
+        <div class="form-group">
+          <label for="so-qty">পরিমাণ *</label>
+          <input type="number" id="so-qty" min="1" step="1" required />
+        </div>
+        <div class="form-group">
+          <label for="so-price">বিক্রয় মূল্য (প্রতি ইউনিট) *</label>
+          <input type="number" id="so-price" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="so-date">তারিখ *</label>
+          <input type="date" id="so-date" required />
+        </div>
+        <div class="form-group full">
+          <label for="so-note">নোট (ঐচ্ছিক)</label>
+          <input type="text" id="so-note" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">বিক্রয় সম্পন্ন করুন</button>
+        </div>
+      </form>
+
+      <h3>সাম্প্রতিক বিক্রয়</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead><tr><th>তারিখ</th><th>পণ্য</th><th>পরিমাণ</th><th>বিক্রয় মূল্য</th><th>মোট আয়</th></tr></thead>
+          <tbody id="stockout-list"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Hisab -->
+    <section id="hisab" class="page">
+      <h2>💰 হিসাব-খাতা</h2>
+      <div class="stats-grid">
+        <div class="stat-card"><h3>মোট আয়</h3><p id="h-income">0</p></div>
+        <div class="stat-card"><h3>মোট ব্যয়</h3><p id="h-expense">0</p></div>
+        <div class="stat-card"><h3>ব্যালেন্স</h3><p id="h-balance">0</p></div>
+      </div>
+
+      <h3>নতুন আয়/ব্যয় যোগ করুন</h3>
+      <form id="manual-txn-form" class="card form-grid">
+        <div class="form-group">
+          <label for="mt-type">ধরন *</label>
+          <select id="mt-type" required>
+            <option value="income">আয় (Income)</option>
+            <option value="expense">ব্যয় (Expense)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mt-category">ক্যাটাগরি</label>
+          <input type="text" id="mt-category" placeholder="যেমন: ভাড়া, বেতন, বিদ্যুৎ" />
+        </div>
+        <div class="form-group">
+          <label for="mt-amount">টাকা *</label>
+          <input type="number" id="mt-amount" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="mt-date">তারিখ *</label>
+          <input type="date" id="mt-date" required />
+        </div>
+        <div class="form-group full">
+          <label for="mt-note">নোট</label>
+          <input type="text" id="mt-note" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">যোগ করুন</button>
+        </div>
+      </form>
+
+      <h3>সকল লেনদেন</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead><tr><th>তারিখ</th><th>বিবরণ</th><th>ধরন</th><th>আয়</th><th>ব্যয়</th></tr></thead>
+          <tbody id="txn-list"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>তথ্য ব্রাউজারের localStorage-এ সংরক্ষিত হয়। GitHub Pages-এ হোস্ট করার জন্য উপযুক্ত।</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
