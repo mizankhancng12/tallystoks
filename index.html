@@ -1,218 +1,2370 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>দোকান ম্যানেজার - Shop & Stock Management</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f97316">
+<title>দোকান ম্যানেজার</title>
+
+<style>
+:root {
+  --orange: #f97316;
+  --dark-orange: #ea580c;
+  --light-orange: #fff7ed;
+  --green: #16a34a;
+  --blue: #2563eb;
+  --purple: #9333ea;
+  --red: #dc2626;
+  --bg: #f3f5f8;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans Bengali", system-ui, sans-serif;
+  font-size: 15px;
+  padding-bottom: 85px;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:active {
+  opacity: .85;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  color: white;
+  background: var(--orange);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+header small {
+  display: block;
+  opacity: .9;
+  font-size: 11px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 10px;
+  color: white;
+  background: rgba(255,255,255,.2);
+  font-size: 18px;
+}
+
+.page {
+  display: none;
+  padding: 13px;
+}
+
+.page.active {
+  display: block;
+}
+
+.card {
+  margin-bottom: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.stat {
+  min-width: 0;
+  padding: 13px;
+  border-radius: 13px;
+  color: white;
+}
+
+.stat.blue { background: #2563eb; }
+.stat.green { background: #16a34a; }
+.stat.orange { background: #f97316; }
+.stat.purple { background: #9333ea; }
+
+.stat small {
+  display: block;
+  opacity: .92;
+  font-size: 12px;
+}
+
+.stat strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 19px;
+  overflow-wrap: anywhere;
+}
+
+.quick {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.quick button {
+  padding: 13px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: white;
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+
+.quick button span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 22px;
+}
+
+label {
+  display: block;
+  margin: 11px 0 5px;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
+  background: white;
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--orange);
+}
+
+.row {
+  display: flex;
+  gap: 9px;
+}
+
+.row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--orange);
+  color: white;
+  font-weight: 700;
+}
+
+.button.green { background: var(--green); }
+.button.blue { background: var(--blue); }
+.button.red { background: var(--red); }
+
+.button.gray {
+  background: #eef0f3;
+  color: #4b5563;
+}
+
+.button.outline {
+  border: 1px solid #fed7aa;
+  background: white;
+  color: var(--dark-orange);
+}
+
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 11px;
+  padding: 4px;
+  border-radius: 11px;
+  background: white;
+}
+
+.tabs button {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 3px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tabs button.active {
+  background: var(--light-orange);
+  color: var(--dark-orange);
+}
+
+.list {
+  overflow: hidden;
+  border-radius: 13px;
+  background: white;
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-bottom: 1px solid #f0f1f3;
+  background: white;
+  color: var(--text);
+  text-align: left;
+}
+
+.list-row:last-child {
+  border-bottom: 0;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--light-orange);
+  color: var(--dark-orange);
+  font-weight: 700;
+}
+
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.item-sub {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.item-right {
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.green-text { color: var(--green); }
+.red-text { color: var(--red); }
+.orange-text { color: var(--dark-orange); }
+.muted { color: var(--muted); }
+
+.empty {
+  padding: 35px 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty .emoji {
+  margin-bottom: 8px;
+  font-size: 34px;
+  opacity: .5;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 150px;
+  padding-top: 8px;
+}
+
+.chart-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+}
+
+.bar-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 110px;
+}
+
+.bar {
+  width: 60%;
+  min-width: 12px;
+  max-width: 32px;
+  border-radius: 6px 6px 0 0;
+  background: var(--blue);
+}
+
+.chart-label {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.chart-value {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.pie-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pie {
+  width: 125px;
+  height: 125px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e5e7eb;
+}
+
+.legend {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.legend div {
+  margin: 6px 0;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.summary {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 11px;
+  background: var(--light-orange);
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid var(--border);
+  background: white;
+}
+
+.nav button {
+  flex: 1;
+  padding: 8px 2px;
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nav button span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 20px;
+}
+
+.nav button.active {
+  color: var(--dark-orange);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0,0,0,.48);
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
+  border-radius: 18px 18px 0 0;
+  background: white;
+}
+
+.sheet h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.grab {
+  width: 40px;
+  height: 4px;
+  margin: 0 auto 14px;
+  border-radius: 5px;
+  background: #e5e7eb;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.history-row:last-child {
+  border-bottom: 0;
+}
+
+#toast {
+  position: fixed;
+  right: 15px;
+  bottom: 90px;
+  left: 15px;
+  z-index: 110;
+  display: none;
+  width: fit-content;
+  max-width: 90%;
+  margin: auto;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #222;
+  color: white;
+  text-align: center;
+  font-size: 13px;
+}
+
+#toast.show {
+  display: block;
+}
+
+#auth {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(160deg, #fb923c, #ea580c);
+}
+
+#auth.hidden {
+  display: none;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 340px;
+  padding: 22px;
+  border-radius: 18px;
+  background: white;
+  text-align: center;
+}
+
+.auth-card h2 {
+  margin: 0 0 5px;
+}
+
+.auth-card p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.auth-card label {
+  text-align: left;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 350px) {
+  .stat strong { font-size: 16px; }
+  .pie { width: 100px; height: 100px; }
+}
+</style>
 </head>
+
 <body>
-  <header class="navbar">
-    <div class="nav-container">
-      <h1 class="logo">🛒 দোকান ম্যানেজার</h1>
-      <nav class="nav-links">
-        <button class="nav-btn active" data-target="dashboard">📊 ড্যাশবোর্ড</button>
-        <button class="nav-btn" data-target="products">📦 পণ্য</button>
-        <button class="nav-btn" data-target="stockin">➕ স্টক ইন</button>
-        <button class="nav-btn" data-target="stockout">➖ স্টক আউট</button>
-        <button class="nav-btn" data-target="hisab">💰 হিসাব-খাতা</button>
-      </nav>
+
+<!-- PIN -->
+<div id="auth">
+  <div class="auth-card" id="authBox"></div>
+</div>
+
+<header>
+  <div>
+    <h1 id="shopTitle">দোকান ম্যানেজার</h1>
+    <small>স্টক ও হিসাব একসাথে</small>
+  </div>
+
+  <div class="header-buttons">
+    <button class="icon-button" data-action="lock" aria-label="লক">🔒</button>
+    <button class="icon-button" data-action="go" data-page="settings" aria-label="সেটিংস">⚙️</button>
+  </div>
+</header>
+
+<!-- ড্যাশবোর্ড -->
+<section class="page active" id="page-dashboard">
+  <div class="stats" id="dashboardStats"></div>
+
+  <div class="quick">
+    <button data-action="transaction-form" data-type="sale">
+      <span>🛒</span>বিক্রয়
+    </button>
+
+    <button data-action="transaction-form" data-type="buy">
+      <span>📦</span>ক্রয়
+    </button>
+
+    <button data-action="cash-form">
+      <span>💰</span>খরচ / আয়
+    </button>
+
+    <button data-action="go" data-page="ledger">
+      <span>📒</span>বাকির খাতা
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>গত ৭ দিনের বিক্রয়</h3>
+    <div class="chart" id="salesChart"></div>
+  </div>
+
+  <div class="card">
+    <h3>হিসাবের চিত্র</h3>
+    <div class="pie-row">
+      <div class="pie" id="pieChart"></div>
+      <div class="legend" id="pieLegend"></div>
     </div>
-  </header>
+    <p class="note">বিক্রয়, ক্রয় ও খরচের মোট টাকার তুলনা।</p>
+  </div>
 
-  <main class="container">
-    <!-- Dashboard -->
-    <section id="dashboard" class="page active">
-      <h2>📊 ড্যাশবোর্ড</h2>
-      <div class="stats-grid">
-        <div class="stat-card"><h3>মোট পণ্য</h3><p id="stat-products">0</p></div>
-        <div class="stat-card"><h3>মোট স্টক (পিস)</h3><p id="stat-stock">0</p></div>
-        <div class="stat-card"><h3>স্টক মূল্য (ক্রয়)</h3><p id="stat-stock-value">0</p></div>
-        <div class="stat-card"><h3>মোট বিক্রয়</h3><p id="stat-sales">0</p></div>
-        <div class="stat-card"><h3>মোট ক্রয়</h3><p id="stat-purchase">0</p></div>
-        <div class="stat-card"><h3>নিট ব্যালেন্স</h3><p id="stat-balance">0</p></div>
-        <div class="stat-card warning"><h3>কম স্টক (≤৫)</h3><p id="stat-low">0</p></div>
+  <div class="card">
+    <h3>স্টক কম</h3>
+    <div id="lowStock"></div>
+  </div>
+
+  <div class="card">
+    <h3>সাম্প্রতিক লেনদেন</h3>
+    <div id="recentTransactions"></div>
+  </div>
+</section>
+
+<!-- স্টক -->
+<section class="page" id="page-stock">
+  <button class="button" data-action="product-form">＋ নতুন পণ্য</button>
+
+  <div style="height:12px"></div>
+
+  <input id="stockSearch" placeholder="পণ্যের নাম খুঁজুন">
+
+  <div style="height:12px"></div>
+
+  <div class="list" id="stockList"></div>
+</section>
+
+<!-- বাকি -->
+<section class="page" id="page-ledger">
+  <div class="stats" id="ledgerStats"></div>
+
+  <div class="tabs">
+    <button class="active" data-action="ledger-tab" data-tab="all">সবাই</button>
+    <button data-action="ledger-tab" data-tab="customer">কাস্টমার</button>
+    <button data-action="ledger-tab" data-tab="supplier">সাপ্লায়ার</button>
+  </div>
+
+  <button class="button" data-action="party-form">＋ নতুন খাতা</button>
+
+  <div style="height:12px"></div>
+
+  <input id="partySearch" placeholder="নাম বা নম্বর খুঁজুন">
+
+  <div style="height:12px"></div>
+
+  <div class="list" id="partyList"></div>
+</section>
+
+<!-- রিপোর্ট -->
+<section class="page" id="page-report">
+  <div class="card">
+    <h3>রিপোর্টের সময়</h3>
+
+    <div class="row">
+      <div>
+        <label for="reportFrom">থেকে</label>
+        <input type="date" id="reportFrom">
       </div>
 
-      <h3>সাম্প্রতিক লেনদেন</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr><th>তারিখ</th><th>বিবরণ</th><th>ধরন</th><th>টাকা</th></tr>
-          </thead>
-          <tbody id="recent-transactions"></tbody>
-        </table>
+      <div>
+        <label for="reportTo">পর্যন্ত</label>
+        <input type="date" id="reportTo">
       </div>
-    </section>
+    </div>
 
-    <!-- Products -->
-    <section id="products" class="page">
-      <h2>📦 পণ্য ব্যবস্থাপনা</h2>
-      <form id="product-form" class="card form-grid">
-        <input type="hidden" id="product-id" />
-        <div class="form-group">
-          <label for="p-name">পণ্যের নাম *</label>
-          <input type="text" id="p-name" required />
-        </div>
-        <div class="form-group">
-          <label for="p-cost">ক্রয় মূল্য (প্রতি ইউনিট) *</label>
-          <input type="number" id="p-cost" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="p-price">বিক্রয় মূল্য (প্রতি ইউনিট) *</label>
-          <input type="number" id="p-price" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="p-stock">স্টক পরিমাণ *</label>
-          <input type="number" id="p-stock" min="0" step="1" required />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn primary">সংরক্ষণ করুন</button>
-          <button type="button" id="cancel-edit" class="btn secondary" style="display:none;">বাতিল</button>
-        </div>
-      </form>
+    <button class="button outline" data-action="report-month">এ মাস</button>
+  </div>
 
-      <h3>পণ্যের তালিকা</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr><th>নাম</th><th>ক্রয় মূল্য</th><th>বিক্রয় মূল্য</th><th>স্টক</th><th>অ্যাকশন</th></tr>
-          </thead>
-          <tbody id="product-list"></tbody>
-        </table>
+  <div class="stats" id="reportStats"></div>
+
+  <div class="card">
+    <h3>Excel-এ হিসাব নিন</h3>
+    <p class="note">
+      CSV ফাইল Excel-এ খোলা যায়। প্রতিটি বাটন আলাদা ফাইল ডাউনলোড করবে।
+    </p>
+
+    <button class="button blue" data-action="export" data-kind="transactions">
+      লেনদেন CSV
+    </button>
+
+    <button class="button outline" data-action="export" data-kind="products">
+      পণ্য ও স্টক CSV
+    </button>
+
+    <button class="button outline" data-action="export" data-kind="parties">
+      বাকি হিসাব CSV
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>লেনদেনের তালিকা</h3>
+    <div id="reportList"></div>
+  </div>
+</section>
+
+<!-- সেটিংস -->
+<section class="page" id="page-settings">
+  <div class="card">
+    <h3>দোকানের তথ্য</h3>
+
+    <label for="settingShop">দোকানের নাম</label>
+    <input id="settingShop" placeholder="দোকানের নাম">
+
+    <label for="settingPhone">মোবাইল নম্বর</label>
+    <input id="settingPhone" inputmode="tel" placeholder="017XXXXXXXX">
+
+    <button class="button" data-action="save-settings">সংরক্ষণ</button>
+  </div>
+
+  <div class="card">
+    <h3>নিরাপত্তা</h3>
+
+    <button class="button outline" data-action="pin-form">PIN পরিবর্তন</button>
+    <button class="button gray" data-action="lock">এখনই লক করুন</button>
+
+    <p class="note">
+      এই PIN সাধারণ স্ক্রিন লক। এটি তথ্য এনক্রিপ্ট করে না।
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>ব্যাকআপ</h3>
+
+    <p class="note">
+      নিয়মিত ব্যাকআপ নিয়ে ফোনের বাইরে বা Google Drive-এ রাখুন।
+    </p>
+
+    <button class="button blue" data-action="backup">
+      ব্যাকআপ ডাউনলোড
+    </button>
+
+    <button class="button outline" data-action="choose-restore">
+      ব্যাকআপ ফেরত আনুন
+    </button>
+
+    <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+  </div>
+</section>
+
+<nav class="nav">
+  <button class="active" data-action="go" data-page="dashboard">
+    <span>🏠</span>হোম
+  </button>
+
+  <button data-action="go" data-page="stock">
+    <span>📦</span>স্টক
+  </button>
+
+  <button data-action="go" data-page="ledger">
+    <span>📒</span>বাকি
+  </button>
+
+  <button data-action="go" data-page="report">
+    <span>📊</span>রিপোর্ট
+  </button>
+
+  <button data-action="go" data-page="settings">
+    <span>⚙️</span>আরো
+  </button>
+</nav>
+
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+
+const KEY = "shop_manager_dashboard_v1";
+const $ = id => document.getElementById(id);
+
+function emptyData() {
+  return {
+    shop: { name: "দোকান ম্যানেজার", phone: "" },
+    pin: "",
+    products: [],
+    parties: [],
+    transactions: [],
+    payments: [],
+    cash: []
+  };
+}
+
+let D = emptyData();
+let unlocked = false;
+let currentPage = "dashboard";
+let ledgerTab = "all";
+let selectedPartyId = "";
+let wrongAttempts = 0;
+let blockedUntil = 0;
+let lastActivity = Date.now();
+
+function load() {
+  const raw = localStorage.getItem(KEY);
+  if (!raw) return;
+
+  try {
+    const data = JSON.parse(raw);
+
+    if (
+      !data ||
+      !data.shop ||
+      !Array.isArray(data.products) ||
+      !Array.isArray(data.parties) ||
+      !Array.isArray(data.transactions) ||
+      !Array.isArray(data.payments) ||
+      !Array.isArray(data.cash)
+    ) {
+      throw new Error("Invalid data");
+    }
+
+    D = {
+      ...emptyData(),
+      ...data,
+      shop: {
+        ...emptyData().shop,
+        ...data.shop
+      }
+    };
+  } catch (error) {
+    alert("সংরক্ষিত তথ্য পড়া যায়নি। অ্যাপের তথ্য মুছে ফেলবেন না; আগে ব্যাকআপ খুঁজে দেখুন।");
+  }
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(D));
+    return true;
+  } catch (error) {
+    alert("তথ্য সংরক্ষণ করা যায়নি। ডিভাইসে জায়গা ও ব্রাউজারের অনুমতি দেখুন।");
+    return false;
+  }
+}
+
+function id() {
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 9);
+}
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function bn(value) {
+  const digits = "০১২৩৪৫৬৭৮৯";
+  return String(value).replace(/[0-9]/g, n => digits[Number(n)]);
+}
+
+function englishDigits(value) {
+  const digits = "০১২৩৪৫৬৭৮৯";
+  return String(value || "").replace(/[০-৯]/g, n => digits.indexOf(n));
+}
+
+function format(value, decimals = 2) {
+  const n = Number(value);
+  return (Number.isFinite(n) ? n : 0).toLocaleString("en-US", {
+    maximumFractionDigits: decimals
+  });
+}
+
+function money(value) {
+  return "৳" + bn(format(value));
+}
+
+function quantity(value) {
+  return bn(format(value, 3));
+}
+
+function localDate(date = new Date()) {
+  return date.getFullYear() + "-" +
+    String(date.getMonth() + 1).padStart(2, "0") + "-" +
+    String(date.getDate()).padStart(2, "0");
+}
+
+function displayDate(value) {
+  const parts = String(value || "").split("-");
+  if (parts.length !== 3) return escapeHTML(value || "");
+  return bn(parts[2] + "/" + parts[1] + "/" + parts[0]);
+}
+
+function getNumber(elementId) {
+  const element = $(elementId);
+  if (!element || element.value.trim() === "") return 0;
+
+  const value = Number(element.value);
+  return Number.isFinite(value) ? value : NaN;
+}
+
+function nonNegative(value) {
+  return Number.isFinite(value) && value >= 0;
+}
+
+function roundMoney(value) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function simpleHash(value) {
+  let h = 5381;
+  const text = "shop-lock-" + value;
+
+  for (let i = 0; i < text.length; i++) {
+    h = ((h << 5) + h) + text.charCodeAt(i);
+  }
+
+  return (h >>> 0).toString(36);
+}
+
+let toastTimer;
+
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2400);
+}
+
+function openSheet(html) {
+  $("sheet").innerHTML = '<div class="grab"></div>' + html;
+  $("overlay").classList.add("show");
+}
+
+function closeSheet() {
+  $("overlay").classList.remove("show");
+  $("sheet").innerHTML = "";
+}
+
+function empty(icon, title, detail = "") {
+  return `
+    <div class="empty">
+      <div class="emoji">${icon}</div>
+      <strong>${escapeHTML(title)}</strong>
+      ${detail ? `<div>${escapeHTML(detail)}</div>` : ""}
+    </div>
+  `;
+}
+
+/* ---------- PIN ---------- */
+
+function setupScreen() {
+  $("auth").classList.remove("hidden");
+
+  $("authBox").innerHTML = `
+    <div style="font-size:42px">🏪</div>
+    <h2>দোকান ম্যানেজার</h2>
+    <p>প্রথমবার দোকানের নাম ও PIN সেট করুন</p>
+
+    <label for="setupShop">দোকানের নাম</label>
+    <input id="setupShop" placeholder="যেমন: বিসমিল্লাহ স্টোর">
+
+    <label for="setupPin">৪ সংখ্যার PIN</label>
+    <input id="setupPin" type="password" inputmode="numeric" maxlength="4">
+
+    <label for="setupPin2">PIN আবার লিখুন</label>
+    <input id="setupPin2" type="password" inputmode="numeric" maxlength="4">
+
+    <button class="button" data-action="setup">শুরু করুন</button>
+
+    <p class="note" style="margin-top:12px">
+      PIN মনে রাখুন। এই সংস্করণে PIN ভুলে গেলে অনলাইন রিকভারি নেই।
+    </p>
+  `;
+}
+
+function finishSetup() {
+  const name = $("setupShop").value.trim();
+  const pin = englishDigits($("setupPin").value.trim());
+  const pin2 = englishDigits($("setupPin2").value.trim());
+
+  if (!name) return toast("দোকানের নাম লিখুন।");
+  if (!/^\d{4}$/.test(pin)) return toast("৪ সংখ্যার PIN দিন।");
+  if (pin !== pin2) return toast("দুটি PIN মিলছে না।");
+
+  D.shop.name = name;
+  D.pin = simpleHash(pin);
+
+  if (!save()) return;
+
+  unlock();
+}
+
+function loginScreen() {
+  $("auth").classList.remove("hidden");
+
+  $("authBox").innerHTML = `
+    <div style="font-size:42px">🔒</div>
+    <h2>${escapeHTML(D.shop.name)}</h2>
+    <p>PIN দিয়ে প্রবেশ করুন</p>
+
+    <label for="loginPin">৪ সংখ্যার PIN</label>
+    <input id="loginPin" type="password" inputmode="numeric" maxlength="4">
+
+    <button class="button" data-action="login">প্রবেশ করুন</button>
+  `;
+}
+
+function login() {
+  if (Date.now() < blockedUntil) {
+    return toast("কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।");
+  }
+
+  const pin = englishDigits($("loginPin").value.trim());
+
+  if (simpleHash(pin) !== D.pin) {
+    wrongAttempts++;
+
+    if (wrongAttempts >= 5) {
+      blockedUntil = Date.now() + 30000;
+      wrongAttempts = 0;
+      toast("৫ বার ভুল। ৩০ সেকেন্ড অপেক্ষা করুন।");
+    } else {
+      toast("PIN ভুল হয়েছে।");
+    }
+
+    $("loginPin").value = "";
+    return;
+  }
+
+  wrongAttempts = 0;
+  unlock();
+}
+
+function unlock() {
+  unlocked = true;
+  lastActivity = Date.now();
+  $("auth").classList.add("hidden");
+  setMonth();
+  go("dashboard");
+}
+
+function lock() {
+  unlocked = false;
+  closeSheet();
+  loginScreen();
+}
+
+["click", "keydown", "touchstart", "input"].forEach(name => {
+  document.addEventListener(name, () => {
+    lastActivity = Date.now();
+  }, { passive: true });
+});
+
+setInterval(() => {
+  if (unlocked && Date.now() - lastActivity > 3 * 60 * 1000) {
+    lock();
+  }
+}, 5000);
+
+/* ---------- নেভিগেশন ---------- */
+
+function go(page) {
+  if (!unlocked) return;
+
+  currentPage = page;
+
+  document.querySelectorAll(".page").forEach(element => {
+    element.classList.toggle("active", element.id === "page-" + page);
+  });
+
+  document.querySelectorAll(".nav button").forEach(element => {
+    element.classList.toggle("active", element.dataset.page === page);
+  });
+
+  $("shopTitle").textContent = D.shop.name;
+
+  if (page === "dashboard") renderDashboard();
+  if (page === "stock") renderStock();
+  if (page === "ledger") renderLedger();
+  if (page === "report") renderReport();
+  if (page === "settings") renderSettings();
+
+  window.scrollTo(0, 0);
+}
+
+/* ---------- হিসাব ---------- */
+
+function totals(from = "", to = "") {
+  const inRange = date => (!from || date >= from) && (!to || date <= to);
+
+  const result = {
+    sales: 0,
+    purchases: 0,
+    profit: 0,
+    expenses: 0,
+    income: 0
+  };
+
+  for (const t of D.transactions) {
+    if (!inRange(t.date)) continue;
+
+    if (t.type === "sale") {
+      result.sales += Number(t.total) || 0;
+      result.profit +=
+        ((Number(t.rate) || 0) - (Number(t.cost) || 0)) *
+        (Number(t.qty) || 0);
+    }
+
+    if (t.type === "buy") {
+      result.purchases += Number(t.total) || 0;
+    }
+  }
+
+  for (const item of D.cash) {
+    if (!inRange(item.date)) continue;
+
+    if (item.type === "expense") {
+      result.expenses += Number(item.amount) || 0;
+    } else {
+      result.income += Number(item.amount) || 0;
+    }
+  }
+
+  result.net = result.profit + result.income - result.expenses;
+
+  return result;
+}
+
+function partyBalance(partyId) {
+  let balance = 0;
+
+  for (const t of D.transactions) {
+    if (t.partyId !== partyId) continue;
+
+    const due = Number(t.due) || 0;
+    balance += t.type === "sale" ? due : -due;
+  }
+
+  for (const p of D.payments) {
+    if (p.partyId !== partyId) continue;
+
+    const amount = Number(p.amount) || 0;
+    balance += p.type === "in" ? -amount : amount;
+  }
+
+  return roundMoney(balance);
+}
+
+function allBalances() {
+  let get = 0;
+  let give = 0;
+
+  for (const party of D.parties) {
+    const value = partyBalance(party.id);
+    if (value > 0) get += value;
+    if (value < 0) give += -value;
+  }
+
+  return { get, give };
+}
+
+/* ---------- ড্যাশবোর্ড ---------- */
+
+function renderDashboard() {
+  $("shopTitle").textContent = D.shop.name;
+
+  const t = totals();
+  const balances = allBalances();
+
+  $("dashboardStats").innerHTML = `
+    <div class="stat blue">
+      <small>মোট বিক্রয়</small>
+      <strong>${money(t.sales)}</strong>
+    </div>
+
+    <div class="stat green">
+      <small>আনুমানিক লাভ</small>
+      <strong>${money(t.net)}</strong>
+    </div>
+
+    <div class="stat orange">
+      <small>মোট খরচ</small>
+      <strong>${money(t.expenses)}</strong>
+    </div>
+
+    <div class="stat purple">
+      <small>মোট পাবো</small>
+      <strong>${money(balances.get)}</strong>
+    </div>
+  `;
+
+  renderSalesChart();
+  renderPie(t);
+
+  const low = D.products.filter(p => Number(p.qty) <= Number(p.low || 0));
+
+  $("lowStock").innerHTML = low.length
+    ? low.slice(0, 8).map(p => `
+        <div class="history-row">
+          <span>${escapeHTML(p.name)}</span>
+          <strong class="red-text">
+            ${quantity(p.qty)} ${escapeHTML(p.unit)}
+          </strong>
+        </div>
+      `).join("")
+    : '<div class="muted">স্টক কম এমন কোনো পণ্য নেই।</div>';
+
+  const recent = D.transactions.slice().reverse().slice(0, 6);
+
+  $("recentTransactions").innerHTML = recent.length
+    ? recent.map(t => `
+        <div class="history-row">
+          <div>
+            <strong>${t.type === "sale" ? "বিক্রয়" : "ক্রয়"} · ${escapeHTML(t.productName)}</strong>
+            <div class="item-sub">${displayDate(t.date)}</div>
+          </div>
+          <strong>${money(t.total)}</strong>
+        </div>
+      `).join("")
+    : '<div class="muted">এখনো কোনো লেনদেন নেই।</div>';
+}
+
+function renderSalesChart() {
+  const days = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const key = localDate(date);
+
+    const sum = D.transactions
+      .filter(t => t.type === "sale" && t.date === key)
+      .reduce((total, t) => total + (Number(t.total) || 0), 0);
+
+    days.push({ key, sum });
+  }
+
+  const max = Math.max(1, ...days.map(day => day.sum));
+
+  $("salesChart").innerHTML = days.map(day => {
+    const height = day.sum > 0 ? Math.max(4, day.sum / max * 100) : 0;
+
+    return `
+      <div class="chart-column">
+        <div class="chart-value">${day.sum ? bn(format(day.sum, 0)) : ""}</div>
+        <div class="bar-wrap">
+          <div class="bar" style="height:${height}%"></div>
+        </div>
+        <div class="chart-label">${bn(day.key.slice(8))}</div>
       </div>
-    </section>
+    `;
+  }).join("");
+}
 
-    <!-- Stock In -->
-    <section id="stockin" class="page">
-      <h2>➕ স্টক ইন (ক্রয়/জমা)</h2>
-      <form id="stockin-form" class="card form-grid">
-        <div class="form-group">
-          <label for="si-product">পণ্য নির্বাচন করুন *</label>
-          <select id="si-product" required></select>
-        </div>
-        <div class="form-group">
-          <label for="si-qty">পরিমাণ *</label>
-          <input type="number" id="si-qty" min="1" step="1" required />
-        </div>
-        <div class="form-group">
-          <label for="si-cost">ক্রয় মূল্য (প্রতি ইউনিট) *</label>
-          <input type="number" id="si-cost" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="si-date">তারিখ *</label>
-          <input type="date" id="si-date" required />
-        </div>
-        <div class="form-group full">
-          <label for="si-note">নোট (ঐচ্ছিক)</label>
-          <input type="text" id="si-note" />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn primary">স্টক যোগ করুন</button>
-        </div>
-      </form>
+function renderPie(t) {
+  const sale = Math.max(0, t.sales);
+  const buy = Math.max(0, t.purchases);
+  const expense = Math.max(0, t.expenses);
+  const total = sale + buy + expense;
 
-      <h3>সাম্প্রতিক স্টক ইন</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead><tr><th>তারিখ</th><th>পণ্য</th><th>পরিমাণ</th><th>ক্রয় মূল্য</th><th>মোট খরচ</th></tr></thead>
-          <tbody id="stockin-list"></tbody>
-        </table>
+  if (total > 0) {
+    const a = sale / total * 100;
+    const b = (sale + buy) / total * 100;
+
+    $("pieChart").style.background =
+      `conic-gradient(#2563eb 0 ${a}%, #16a34a ${a}% ${b}%, #f97316 ${b}% 100%)`;
+  } else {
+    $("pieChart").style.background = "#e5e7eb";
+  }
+
+  $("pieLegend").innerHTML = `
+    <div><span class="dot" style="background:#2563eb"></span>বিক্রয় ${money(sale)}</div>
+    <div><span class="dot" style="background:#16a34a"></span>ক্রয় ${money(buy)}</div>
+    <div><span class="dot" style="background:#f97316"></span>খরচ ${money(expense)}</div>
+  `;
+}
+
+/* ---------- পণ্য ---------- */
+
+function renderStock() {
+  const query = $("stockSearch").value.trim().toLowerCase();
+
+  const products = D.products.filter(p =>
+    p.name.toLowerCase().includes(query)
+  );
+
+  if (!products.length) {
+    $("stockList").innerHTML = empty(
+      "📦",
+      "কোনো পণ্য নেই",
+      "নতুন পণ্য বাটনে চাপ দিয়ে পণ্য যোগ করুন।"
+    );
+    return;
+  }
+
+  $("stockList").innerHTML = products.map(p => {
+    const low = Number(p.qty) <= Number(p.low || 0);
+
+    return `
+      <button class="list-row" data-action="product-details" data-id="${escapeHTML(p.id)}">
+        <div class="avatar">${escapeHTML(Array.from(p.name)[0] || "?")}</div>
+
+        <div class="item-main">
+          <div class="item-title">${escapeHTML(p.name)}</div>
+          <div class="item-sub">বিক্রয়: ${money(p.sell)}</div>
+        </div>
+
+        <div class="item-right ${low ? "red-text" : ""}">
+          ${quantity(p.qty)} ${escapeHTML(p.unit)}
+          <div class="item-sub">${low ? "স্টক কম" : "স্টক আছে"}</div>
+        </div>
+      </button>
+    `;
+  }).join("");
+}
+
+function productForm(productId = "") {
+  const p = D.products.find(item => item.id === productId);
+  const units = ["পিস", "কেজি", "লিটার", "প্যাকেট", "বস্তা", "ডজন", "বক্স", "গ্রাম"];
+
+  openSheet(`
+    <h3>${p ? "পণ্য পরিবর্তন" : "নতুন পণ্য"}</h3>
+
+    <label for="pName">পণ্যের নাম</label>
+    <input id="pName" value="${escapeHTML(p?.name || "")}" placeholder="যেমন: চাল">
+
+    <div class="row">
+      <div>
+        <label for="pUnit">একক</label>
+        <select id="pUnit">
+          ${units.map(unit => `
+            <option ${p?.unit === unit ? "selected" : ""}>${escapeHTML(unit)}</option>
+          `).join("")}
+        </select>
       </div>
-    </section>
 
-    <!-- Stock Out -->
-    <section id="stockout" class="page">
-      <h2>➖ স্টক আউট (বিক্রয়)</h2>
-      <form id="stockout-form" class="card form-grid">
-        <div class="form-group">
-          <label for="so-product">পণ্য নির্বাচন করুন *</label>
-          <select id="so-product" required></select>
-        </div>
-        <div class="form-group">
-          <label for="so-qty">পরিমাণ *</label>
-          <input type="number" id="so-qty" min="1" step="1" required />
-        </div>
-        <div class="form-group">
-          <label for="so-price">বিক্রয় মূল্য (প্রতি ইউনিট) *</label>
-          <input type="number" id="so-price" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="so-date">তারিখ *</label>
-          <input type="date" id="so-date" required />
-        </div>
-        <div class="form-group full">
-          <label for="so-note">নোট (ঐচ্ছিক)</label>
-          <input type="text" id="so-note" />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn primary">বিক্রয় সম্পন্ন করুন</button>
-        </div>
-      </form>
-
-      <h3>সাম্প্রতিক বিক্রয়</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead><tr><th>তারিখ</th><th>পণ্য</th><th>পরিমাণ</th><th>বিক্রয় মূল্য</th><th>মোট আয়</th></tr></thead>
-          <tbody id="stockout-list"></tbody>
-        </table>
+      <div>
+        <label for="pQty">বর্তমান স্টক</label>
+        <input id="pQty" type="number" min="0" step="any"
+          value="${p ? escapeHTML(p.qty) : ""}" placeholder="পরিমাণ">
       </div>
-    </section>
+    </div>
 
-    <!-- Hisab -->
-    <section id="hisab" class="page">
-      <h2>💰 হিসাব-খাতা</h2>
-      <div class="stats-grid">
-        <div class="stat-card"><h3>মোট আয়</h3><p id="h-income">0</p></div>
-        <div class="stat-card"><h3>মোট ব্যয়</h3><p id="h-expense">0</p></div>
-        <div class="stat-card"><h3>ব্যালেন্স</h3><p id="h-balance">0</p></div>
+    <div class="row">
+      <div>
+        <label for="pBuy">ক্রয় মূল্য</label>
+        <input id="pBuy" type="number" min="0" step="any"
+          value="${p ? escapeHTML(p.buy) : ""}" placeholder="দাম">
       </div>
 
-      <h3>নতুন আয়/ব্যয় যোগ করুন</h3>
-      <form id="manual-txn-form" class="card form-grid">
-        <div class="form-group">
-          <label for="mt-type">ধরন *</label>
-          <select id="mt-type" required>
-            <option value="income">আয় (Income)</option>
-            <option value="expense">ব্যয় (Expense)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="mt-category">ক্যাটাগরি</label>
-          <input type="text" id="mt-category" placeholder="যেমন: ভাড়া, বেতন, বিদ্যুৎ" />
-        </div>
-        <div class="form-group">
-          <label for="mt-amount">টাকা *</label>
-          <input type="number" id="mt-amount" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="mt-date">তারিখ *</label>
-          <input type="date" id="mt-date" required />
-        </div>
-        <div class="form-group full">
-          <label for="mt-note">নোট</label>
-          <input type="text" id="mt-note" />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn primary">যোগ করুন</button>
-        </div>
-      </form>
-
-      <h3>সকল লেনদেন</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead><tr><th>তারিখ</th><th>বিবরণ</th><th>ধরন</th><th>আয়</th><th>ব্যয়</th></tr></thead>
-          <tbody id="txn-list"></tbody>
-        </table>
+      <div>
+        <label for="pSell">বিক্রয় মূল্য</label>
+        <input id="pSell" type="number" min="0" step="any"
+          value="${p ? escapeHTML(p.sell) : ""}" placeholder="দাম">
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer class="footer">
-    <p>তথ্য ব্রাউজারের localStorage-এ সংরক্ষিত হয়। GitHub Pages-এ হোস্ট করার জন্য উপযুক্ত।</p>
-  </footer>
+    <label for="pLow">কত কম হলে সতর্ক করবে</label>
+    <input id="pLow" type="number" min="0" step="any"
+      value="${p ? escapeHTML(p.low) : ""}" placeholder="ঐচ্ছিক">
 
-  <script src="app.js"></script>
+    <button class="button" data-action="save-product" data-id="${escapeHTML(productId)}">
+      সংরক্ষণ করুন
+    </button>
+
+    <button class="button gray" data-action="close">বাতিল</button>
+  `);
+}
+
+function saveProduct(productId) {
+  const name = $("pName").value.trim();
+  const qty = getNumber("pQty");
+  const buy = getNumber("pBuy");
+  const sell = getNumber("pSell");
+  const low = getNumber("pLow");
+
+  if (!name) return toast("পণ্যের নাম লিখুন।");
+
+  if (![qty, buy, sell, low].every(nonNegative)) {
+    return toast("সঠিক পরিমাণ ও দাম লিখুন।");
+  }
+
+  const values = {
+    name,
+    unit: $("pUnit").value,
+    qty,
+    buy,
+    sell,
+    low
+  };
+
+  if (productId) {
+    const p = D.products.find(item => item.id === productId);
+    if (!p) return toast("পণ্য পাওয়া যায়নি।");
+    Object.assign(p, values);
+  } else {
+    D.products.push({ id: id(), ...values });
+  }
+
+  if (!save()) return;
+
+  closeSheet();
+  renderStock();
+  toast("পণ্য সংরক্ষিত।");
+}
+
+function productDetails(productId) {
+  const p = D.products.find(item => item.id === productId);
+  if (!p) return toast("পণ্য পাওয়া যায়নি।");
+
+  openSheet(`
+    <h3>${escapeHTML(p.name)}</h3>
+
+    <div class="summary">
+      <div class="summary-line">
+        <span>স্টক</span>
+        <strong>${quantity(p.qty)} ${escapeHTML(p.unit)}</strong>
+      </div>
+      <div class="summary-line">
+        <span>ক্রয় মূল্য</span>
+        <strong>${money(p.buy)}</strong>
+      </div>
+      <div class="summary-line">
+        <span>বিক্রয় মূল্য</span>
+        <strong>${money(p.sell)}</strong>
+      </div>
+    </div>
+
+    <button class="button green" data-action="transaction-form"
+      data-type="sale" data-id="${escapeHTML(p.id)}">বিক্রয় করুন</button>
+
+    <button class="button" data-action="transaction-form"
+      data-type="buy" data-id="${escapeHTML(p.id)}">মাল কিনুন</button>
+
+    <button class="button outline" data-action="product-form"
+      data-id="${escapeHTML(p.id)}">তথ্য পরিবর্তন</button>
+
+    <button class="button gray" data-action="close">বন্ধ করুন</button>
+  `);
+}
+
+/* ---------- কাস্টমার ও সাপ্লায়ার ---------- */
+
+function renderLedger() {
+  const balances = allBalances();
+
+  $("ledgerStats").innerHTML = `
+    <div class="stat green">
+      <small>মোট পাবো</small>
+      <strong>${money(balances.get)}</strong>
+    </div>
+    <div class="stat orange">
+      <small>মোট দিবো</small>
+      <strong>${money(balances.give)}</strong>
+    </div>
+  `;
+
+  document.querySelectorAll('[data-action="ledger-tab"]').forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === ledgerTab);
+  });
+
+  const query = $("partySearch").value.trim().toLowerCase();
+
+  const parties = D.parties.filter(p => {
+    const typeMatch = ledgerTab === "all" || p.type === ledgerTab;
+    const searchMatch =
+      p.name.toLowerCase().includes(query) ||
+      String(p.phone || "").includes(query);
+
+    return typeMatch && searchMatch;
+  });
+
+  if (!parties.length) {
+    $("partyList").innerHTML = empty(
+      "📒",
+      "কোনো খাতা নেই",
+      "কাস্টমার বা সাপ্লায়ার যোগ করুন।"
+    );
+    return;
+  }
+
+  $("partyList").innerHTML = parties.map(p => {
+    const value = partyBalance(p.id);
+    const text = value > 0 ? "পাবো" : value < 0 ? "দিবো" : "বাকি নেই";
+    const color = value > 0 ? "green-text" : value < 0 ? "red-text" : "muted";
+
+    return `
+      <button class="list-row" data-action="party-details" data-id="${escapeHTML(p.id)}">
+        <div class="avatar">${escapeHTML(Array.from(p.name)[0] || "?")}</div>
+
+        <div class="item-main">
+          <div class="item-title">${escapeHTML(p.name)}</div>
+          <div class="item-sub">
+            ${p.type === "customer" ? "কাস্টমার" : "সাপ্লায়ার"}
+            ${p.phone ? " · " + escapeHTML(p.phone) : ""}
+          </div>
+        </div>
+
+        <div class="item-right ${color}">
+          ${money(Math.abs(value))}
+          <div class="item-sub ${color}">${text}</div>
+        </div>
+      </button>
+    `;
+  }).join("");
+}
+
+function partyForm(partyId = "") {
+  const p = D.parties.find(item => item.id === partyId);
+
+  openSheet(`
+    <h3>${p ? "খাতার তথ্য পরিবর্তন" : "নতুন খাতা"}</h3>
+
+    <label for="partyName">নাম</label>
+    <input id="partyName" value="${escapeHTML(p?.name || "")}"
+      placeholder="যেমন: করিম">
+
+    <label for="partyPhone">মোবাইল নম্বর</label>
+    <input id="partyPhone" inputmode="tel"
+      value="${escapeHTML(p?.phone || "")}" placeholder="017XXXXXXXX">
+
+    <label for="partyType">ধরন</label>
+    <select id="partyType">
+      <option value="customer" ${!p || p.type === "customer" ? "selected" : ""}>
+        কাস্টমার
+      </option>
+      <option value="supplier" ${p?.type === "supplier" ? "selected" : ""}>
+        সাপ্লায়ার
+      </option>
+    </select>
+
+    <button class="button" data-action="save-party" data-id="${escapeHTML(partyId)}">
+      সংরক্ষণ করুন
+    </button>
+
+    <button class="button gray" data-action="close">বাতিল</button>
+  `);
+}
+
+function saveParty(partyId) {
+  const name = $("partyName").value.trim();
+  const phone = $("partyPhone").value.trim();
+  const type = $("partyType").value;
+
+  if (!name) return toast("নাম লিখুন।");
+
+  if (partyId) {
+    const p = D.parties.find(item => item.id === partyId);
+    if (!p) return toast("খাতা পাওয়া যায়নি।");
+    Object.assign(p, { name, phone, type });
+  } else {
+    D.parties.push({ id: id(), name, phone, type });
+  }
+
+  if (!save()) return;
+
+  closeSheet();
+  renderLedger();
+  toast("খাতা সংরক্ষিত।");
+}
+
+function partyDetails(partyId) {
+  const p = D.parties.find(item => item.id === partyId);
+  if (!p) return toast("খাতা পাওয়া যায়নি।");
+
+  selectedPartyId = partyId;
+
+  const balance = partyBalance(partyId);
+  const label = balance > 0 ? "আপনি পাবেন" : balance < 0 ? "আপনাকে দিতে হবে" : "কোনো বাকি নেই";
+  const color = balance > 0 ? "green-text" : balance < 0 ? "red-text" : "muted";
+
+  const history = [
+    ...D.transactions
+      .filter(t => t.partyId === partyId)
+      .map(t => ({ ...t, category: "transaction" })),
+    ...D.payments
+      .filter(t => t.partyId === partyId)
+      .map(t => ({ ...t, category: "payment" }))
+  ].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+  openSheet(`
+    <h3>${escapeHTML(p.name)}</h3>
+
+    <div class="item-sub">
+      ${p.type === "customer" ? "কাস্টমার" : "সাপ্লায়ার"}
+      · ${p.phone ? escapeHTML(p.phone) : "নম্বর নেই"}
+    </div>
+
+    <div class="summary" style="text-align:center">
+      <div class="${color}">${label}</div>
+      <strong class="${color}" style="font-size:26px">${money(Math.abs(balance))}</strong>
+    </div>
+
+    <div class="row">
+      <button class="button green" data-action="payment-form" data-type="in">টাকা পেলাম</button>
+      <button class="button" data-action="payment-form" data-type="out">টাকা দিলাম</button>
+    </div>
+
+    <div class="row">
+      <button class="button outline" data-action="reminder" data-type="wa">WhatsApp</button>
+      <button class="button outline" data-action="reminder" data-type="sms">SMS</button>
+    </div>
+
+    <button class="button gray" data-action="party-form" data-id="${escapeHTML(p.id)}">
+      তথ্য পরিবর্তন
+    </button>
+
+    <h3 style="margin-top:18px">লেনদেনের ইতিহাস</h3>
+
+    ${history.length ? history.slice(0, 50).map(item => `
+      <div class="history-row">
+        <div>
+          <strong>
+            ${item.category === "payment"
+              ? (item.type === "in" ? "টাকা পেলাম" : "টাকা দিলাম")
+              : (item.type === "sale" ? "বিক্রয়" : "ক্রয়") + " · " + escapeHTML(item.productName)}
+          </strong>
+          <div class="item-sub">${displayDate(item.date)}</div>
+        </div>
+        <strong>${money(item.category === "payment" ? item.amount : item.total)}</strong>
+      </div>
+    `).join("") : '<div class="muted">এখনো কোনো লেনদেন নেই।</div>'}
+
+    <button class="button gray" data-action="close">বন্ধ করুন</button>
+  `);
+}
+
+function paymentForm(type) {
+  const p = D.parties.find(item => item.id === selectedPartyId);
+  if (!p) return toast("খাতা পাওয়া যায়নি।");
+
+  openSheet(`
+    <h3>${type === "in" ? "টাকা পেলাম" : "টাকা দিলাম"}</h3>
+    <div class="muted">${escapeHTML(p.name)}</div>
+
+    <label for="payAmount">টাকার পরিমাণ</label>
+    <input id="payAmount" type="number" min="0" step="0.01"
+      placeholder="পরিমাণ লিখুন">
+
+    <button class="button" data-action="save-payment" data-type="${type}">
+      সংরক্ষণ করুন
+    </button>
+
+    <button class="button gray" data-action="back-party">ফিরে যান</button>
+  `);
+}
+
+function savePayment(type) {
+  const amount = getNumber("payAmount");
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return toast("সঠিক টাকার পরিমাণ লিখুন।");
+  }
+
+  if (!D.parties.some(p => p.id === selectedPartyId)) {
+    return toast("খাতা পাওয়া যায়নি।");
+  }
+
+  D.payments.push({
+    id: id(),
+    partyId: selectedPartyId,
+    type,
+    amount: roundMoney(amount),
+    date: localDate()
+  });
+
+  if (!save()) return;
+
+  renderLedger();
+  partyDetails(selectedPartyId);
+  toast("টাকার হিসাব সংরক্ষিত।");
+}
+
+function reminder(type) {
+  const p = D.parties.find(item => item.id === selectedPartyId);
+  if (!p || !p.phone) return toast("আগে মোবাইল নম্বর যোগ করুন।");
+
+  const balance = partyBalance(p.id);
+
+  if (Math.abs(balance) < 0.005) {
+    return toast("এই খাতায় কোনো বাকি নেই।");
+  }
+
+  let phone = englishDigits(p.phone).replace(/[^\d+]/g, "");
+
+  const text = balance > 0
+    ? `আসসালামু আলাইকুম ${p.name}, ${D.shop.name} থেকে জানাচ্ছি: আপনার কাছে বাকি ${money(balance)}। সুবিধামতো পরিশোধ করলে কৃতজ্ঞ থাকব। ধন্যবাদ।`
+    : `আসসালামু আলাইকুম ${p.name}, ${D.shop.name} থেকে জানাচ্ছি: আপনার পাওনা ${money(Math.abs(balance))} বাকি আছে। ধন্যবাদ।`;
+
+  if (type === "sms") {
+    location.href = "sms:" + phone + "?body=" + encodeURIComponent(text);
+    return;
+  }
+
+  phone = phone.replace(/\D/g, "");
+
+  if (phone.startsWith("0")) phone = "88" + phone;
+  else if (phone.length === 10) phone = "880" + phone;
+
+  if (!/^8801\d{9}$/.test(phone)) {
+    return toast("সঠিক বাংলাদেশি মোবাইল নম্বর দিন।");
+  }
+
+  window.open(
+    "https://wa.me/" + phone + "?text=" + encodeURIComponent(text),
+    "_blank",
+    "noopener"
+  );
+}
+
+/* ---------- বিক্রয় / ক্রয় ---------- */
+
+function transactionForm(type, productId = "") {
+  if (!D.products.length) return toast("আগে স্টকে পণ্য যোগ করুন।");
+
+  const partyType = type === "sale" ? "customer" : "supplier";
+  const parties = D.parties.filter(p => p.type === partyType);
+
+  openSheet(`
+    <h3>${type === "sale" ? "বিক্রয়" : "ক্রয়"}</h3>
+
+    <label for="tProduct">পণ্য</label>
+    <select id="tProduct" data-type="${type}">
+      ${D.products.map(p => `
+        <option value="${escapeHTML(p.id)}" ${p.id === productId ? "selected" : ""}>
+          ${escapeHTML(p.name)} — ${quantity(p.qty)} ${escapeHTML(p.unit)}
+        </option>
+      `).join("")}
+    </select>
+
+    <div class="row">
+      <div>
+        <label for="tQty">পরিমাণ</label>
+        <input id="tQty" type="number" min="0" step="any" placeholder="পরিমাণ">
+      </div>
+
+      <div>
+        <label for="tRate">প্রতি এককের দাম</label>
+        <input id="tRate" type="number" min="0" step="any" placeholder="দাম">
+      </div>
+    </div>
+
+    <label for="tParty">${type === "sale" ? "কাস্টমার" : "সাপ্লায়ার"}</label>
+    <select id="tParty">
+      <option value="">নগদ — খাতা নির্বাচন নয়</option>
+      ${parties.map(p => `
+        <option value="${escapeHTML(p.id)}">${escapeHTML(p.name)}</option>
+      `).join("")}
+    </select>
+
+    <label for="tPaid">${type === "sale" ? "নগদ পেলাম" : "নগদ দিলাম"}</label>
+    <input id="tPaid" type="number" min="0" step="0.01"
+      placeholder="খালি রাখলে পুরোটা বাকি">
+
+    <div class="summary">
+      <div class="summary-line">
+        <span>মোট</span><strong id="tTotal">৳০</strong>
+      </div>
+      <div class="summary-line">
+        <span>বাকি</span><strong id="tDue" class="red-text">৳০</strong>
+      </div>
+    </div>
+
+    <button class="button outline" data-action="full-payment">সম্পূর্ণ পরিশোধ</button>
+
+    <button class="button" data-action="save-transaction" data-type="${type}">
+      সংরক্ষণ করুন
+    </button>
+
+    <button class="button gray" data-action="close">বাতিল</button>
+  `);
+
+  updateRate();
+}
+
+function updateRate() {
+  const select = $("tProduct");
+  if (!select) return;
+
+  const product = D.products.find(p => p.id === select.value);
+  if (!product) return;
+
+  const rate = select.dataset.type === "sale" ? product.sell : product.buy;
+  $("tRate").value = Number(rate) > 0 ? rate : "";
+  calculateTransaction();
+}
+
+function calculateTransaction() {
+  if (!$("tTotal")) return;
+
+  const qty = getNumber("tQty");
+  const rate = getNumber("tRate");
+  const paid = getNumber("tPaid");
+
+  const total = Number.isFinite(qty) && Number.isFinite(rate)
+    ? roundMoney(qty * rate)
+    : 0;
+
+  $("tTotal").textContent = money(total);
+  $("tDue").textContent = money(
+    Math.max(0, total - (Number.isFinite(paid) ? paid : 0))
+  );
+}
+
+function saveTransaction(type) {
+  const product = D.products.find(p => p.id === $("tProduct").value);
+  const qty = getNumber("tQty");
+  const rate = getNumber("tRate");
+  const paid = getNumber("tPaid");
+  const partyId = $("tParty").value;
+
+  if (!product) return toast("পণ্য নির্বাচন করুন।");
+  if (!Number.isFinite(qty) || qty <= 0) return toast("সঠিক পরিমাণ লিখুন।");
+  if (!Number.isFinite(rate) || rate <= 0) return toast("সঠিক দাম লিখুন।");
+  if (!nonNegative(paid)) return toast("সঠিক জমার পরিমাণ লিখুন।");
+
+  const total = roundMoney(qty * rate);
+  const due = roundMoney(total - paid);
+
+  if (paid > total) return toast("জমা মোট টাকার বেশি হতে পারবে না।");
+  if (due > 0 && !partyId) return toast("বাকি থাকলে একটি খাতা নির্বাচন করুন।");
+
+  if (type === "sale" && qty > Number(product.qty)) {
+    return toast("স্টকে যথেষ্ট পণ্য নেই।");
+  }
+
+  const oldCost = Number(product.buy) || 0;
+
+  product.qty = Math.round(
+    (Number(product.qty) + (type === "sale" ? -qty : qty)) * 1000
+  ) / 1000;
+
+  if (type === "buy") product.buy = rate;
+
+  D.transactions.push({
+    id: id(),
+    type,
+    date: localDate(),
+    productId: product.id,
+    productName: product.name,
+    unit: product.unit,
+    qty,
+    rate,
+    cost: oldCost,
+    total,
+    paid,
+    due,
+    partyId
+  });
+
+  if (!save()) return;
+
+  closeSheet();
+  go(currentPage);
+  toast(type === "sale" ? "বিক্রয় সংরক্ষিত।" : "ক্রয় সংরক্ষিত।");
+}
+
+/* ---------- খরচ ---------- */
+
+function cashForm() {
+  openSheet(`
+    <h3>খরচ / বাড়তি আয়</h3>
+
+    <label for="cashTitle">বিবরণ</label>
+    <input id="cashTitle" placeholder="যেমন: দোকান ভাড়া">
+
+    <label for="cashAmount">টাকার পরিমাণ</label>
+    <input id="cashAmount" type="number" min="0" step="0.01" placeholder="পরিমাণ">
+
+    <label for="cashType">ধরন</label>
+    <select id="cashType">
+      <option value="expense">খরচ</option>
+      <option value="income">বাড়তি আয়</option>
+    </select>
+
+    <button class="button" data-action="save-cash">সংরক্ষণ করুন</button>
+    <button class="button gray" data-action="close">বাতিল</button>
+  `);
+}
+
+function saveCash() {
+  const title = $("cashTitle").value.trim();
+  const amount = getNumber("cashAmount");
+
+  if (!title || !Number.isFinite(amount) || amount <= 0) {
+    return toast("বিবরণ ও সঠিক টাকার পরিমাণ লিখুন।");
+  }
+
+  D.cash.push({
+    id: id(),
+    title,
+    amount: roundMoney(amount),
+    type: $("cashType").value,
+    date: localDate()
+  });
+
+  if (!save()) return;
+
+  closeSheet();
+  renderDashboard();
+  toast("হিসাব সংরক্ষিত।");
+}
+
+/* ---------- রিপোর্ট ---------- */
+
+function setMonth() {
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  $("reportFrom").value = localDate(first);
+  $("reportTo").value = localDate(now);
+}
+
+function renderReport() {
+  const from = $("reportFrom").value;
+  const to = $("reportTo").value;
+
+  if (!from || !to) return;
+
+  if (from > to) {
+    $("reportStats").innerHTML = "";
+    $("reportList").innerHTML = '<div class="muted">সঠিক তারিখ নির্বাচন করুন।</div>';
+    return;
+  }
+
+  const t = totals(from, to);
+
+  $("reportStats").innerHTML = `
+    <div class="stat blue">
+      <small>বিক্রয়</small><strong>${money(t.sales)}</strong>
+    </div>
+    <div class="stat green">
+      <small>ক্রয়</small><strong>${money(t.purchases)}</strong>
+    </div>
+    <div class="stat orange">
+      <small>খরচ</small><strong>${money(t.expenses)}</strong>
+    </div>
+    <div class="stat purple">
+      <small>আনুমানিক নিট লাভ</small><strong>${money(t.net)}</strong>
+    </div>
+  `;
+
+  const list = D.transactions
+    .filter(item => item.date >= from && item.date <= to)
+    .slice()
+    .reverse()
+    .slice(0, 100);
+
+  $("reportList").innerHTML = list.length
+    ? list.map(item => `
+        <div class="history-row">
+          <div>
+            <strong>${item.type === "sale" ? "বিক্রয়" : "ক্রয়"} · ${escapeHTML(item.productName)}</strong>
+            <div class="item-sub">${displayDate(item.date)}</div>
+          </div>
+          <strong>${money(item.total)}</strong>
+        </div>
+      `).join("")
+    : '<div class="muted">এই সময়ে কোনো লেনদেন নেই।</div>';
+}
+
+/* ---------- CSV / Excel ---------- */
+
+function csvCell(value) {
+  let text = String(value ?? "");
+
+  /*
+    Excel-এ সূত্র হিসেবে চালু হতে পারে এমন লেখা নিরাপদে
+    টেক্সট হিসেবে দেখানোর জন্য শুরুতে apostrophe যোগ করা হচ্ছে।
+  */
+  if (/^[\s]*[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function download(name, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = name;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportCSV(kind) {
+  let rows = [];
+  let filename = "";
+
+  if (kind === "transactions") {
+    rows.push([
+      "তারিখ", "ধরন", "পণ্য", "পরিমাণ", "একক",
+      "দর", "মোট", "পরিশোধ", "বাকি", "পার্টি"
+    ]);
+
+    for (const t of D.transactions) {
+      const party = D.parties.find(p => p.id === t.partyId);
+
+      rows.push([
+        t.date,
+        t.type === "sale" ? "বিক্রয়" : "ক্রয়",
+        t.productName,
+        t.qty,
+        t.unit,
+        t.rate,
+        t.total,
+        t.paid,
+        t.due,
+        party ? party.name : "নগদ"
+      ]);
+    }
+
+    filename = "লেনদেন";
+  }
+
+  if (kind === "products") {
+    rows.push(["পণ্য", "একক", "স্টক", "ক্রয় মূল্য", "বিক্রয় মূল্য", "সতর্কতার সীমা"]);
+
+    for (const p of D.products) {
+      rows.push([p.name, p.unit, p.qty, p.buy, p.sell, p.low]);
+    }
+
+    filename = "স্টক";
+  }
+
+  if (kind === "parties") {
+    rows.push(["নাম", "ধরন", "ফোন", "পাবো", "দিবো"]);
+
+    for (const p of D.parties) {
+      const balance = partyBalance(p.id);
+
+      rows.push([
+        p.name,
+        p.type === "customer" ? "কাস্টমার" : "সাপ্লায়ার",
+        p.phone,
+        Math.max(0, balance),
+        Math.max(0, -balance)
+      ]);
+    }
+
+    filename = "বাকি";
+  }
+
+  const csv = "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+
+  download(filename + "-" + localDate() + ".csv", csv, "text/csv;charset=utf-8");
+  toast("CSV ডাউনলোড শুরু হয়েছে।");
+}
+
+/* ---------- সেটিংস ও ব্যাকআপ ---------- */
+
+function renderSettings() {
+  $("settingShop").value = D.shop.name || "";
+  $("settingPhone").value = D.shop.phone || "";
+}
+
+function saveSettings() {
+  const name = $("settingShop").value.trim();
+
+  if (!name) return toast("দোকানের নাম লিখুন।");
+
+  D.shop.name = name;
+  D.shop.phone = $("settingPhone").value.trim();
+
+  if (!save()) return;
+
+  $("shopTitle").textContent = name;
+  toast("দোকানের তথ্য সংরক্ষিত।");
+}
+
+function pinForm() {
+  openSheet(`
+    <h3>PIN পরিবর্তন</h3>
+
+    <label for="oldPin">পুরোনো PIN</label>
+    <input id="oldPin" type="password" inputmode="numeric" maxlength="4">
+
+    <label for="newPin">নতুন PIN</label>
+    <input id="newPin" type="password" inputmode="numeric" maxlength="4">
+
+    <label for="newPin2">নতুন PIN আবার</label>
+    <input id="newPin2" type="password" inputmode="numeric" maxlength="4">
+
+    <button class="button" data-action="save-pin">সংরক্ষণ করুন</button>
+    <button class="button gray" data-action="close">বাতিল</button>
+  `);
+}
+
+function savePin() {
+  const oldPin = englishDigits($("oldPin").value.trim());
+  const newPin = englishDigits($("newPin").value.trim());
+  const newPin2 = englishDigits($("newPin2").value.trim());
+
+  if (simpleHash(oldPin) !== D.pin) return toast("পুরোনো PIN ভুল।");
+  if (!/^\d{4}$/.test(newPin)) return toast("৪ সংখ্যার PIN দিন।");
+  if (newPin !== newPin2) return toast("নতুন PIN দুটো মিলছে না।");
+
+  D.pin = simpleHash(newPin);
+
+  if (!save()) return;
+
+  closeSheet();
+  toast("PIN পরিবর্তন হয়েছে।");
+}
+
+function backup() {
+  download(
+    "দোকান-ব্যাকআপ-" + localDate() + ".json",
+    JSON.stringify(D, null, 2),
+    "application/json"
+  );
+
+  toast("ব্যাকআপ ডাউনলোড শুরু হয়েছে।");
+}
+
+function restore(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!confirm("বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসবে। চালিয়ে যাবেন?")) {
+    event.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    try {
+      const incoming = JSON.parse(reader.result);
+
+      if (
+        !incoming ||
+        !incoming.shop ||
+        !Array.isArray(incoming.products) ||
+        !Array.isArray(incoming.parties) ||
+        !Array.isArray(incoming.transactions) ||
+        !Array.isArray(incoming.payments) ||
+        !Array.isArray(incoming.cash)
+      ) {
+        throw new Error("Invalid backup");
+      }
+
+      D = {
+        ...emptyData(),
+        ...incoming,
+        shop: {
+          ...emptyData().shop,
+          ...incoming.shop
+        }
+      };
+
+      if (!save()) return;
+
+      event.target.value = "";
+      unlocked = false;
+      closeSheet();
+
+      if (D.pin) loginScreen();
+      else setupScreen();
+
+      toast("ব্যাকআপ ফেরত এসেছে। আবার PIN দিন।");
+    } catch (error) {
+      toast("ব্যাকআপ ফাইলটি সঠিক নয়।");
+      event.target.value = "";
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+/* ---------- ইভেন্ট ---------- */
+
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-action]");
+  if (!button) return;
+
+  const action = button.dataset.action;
+
+  if (!unlocked && !["setup", "login"].includes(action)) return;
+
+  switch (action) {
+    case "setup":
+      finishSetup();
+      break;
+
+    case "login":
+      login();
+      break;
+
+    case "lock":
+      lock();
+      break;
+
+    case "go":
+      go(button.dataset.page);
+      break;
+
+    case "close":
+      closeSheet();
+      break;
+
+    case "product-form":
+      productForm(button.dataset.id || "");
+      break;
+
+    case "save-product":
+      saveProduct(button.dataset.id || "");
+      break;
+
+    case "product-details":
+      productDetails(button.dataset.id);
+      break;
+
+    case "ledger-tab":
+      ledgerTab = button.dataset.tab;
+      renderLedger();
+      break;
+
+    case "party-form":
+      partyForm(button.dataset.id || "");
+      break;
+
+    case "save-party":
+      saveParty(button.dataset.id || "");
+      break;
+
+    case "party-details":
+      partyDetails(button.dataset.id);
+      break;
+
+    case "back-party":
+      partyDetails(selectedPartyId);
+      break;
+
+    case "payment-form":
+      paymentForm(button.dataset.type);
+      break;
+
+    case "save-payment":
+      savePayment(button.dataset.type);
+      break;
+
+    case "reminder":
+      reminder(button.dataset.type);
+      break;
+
+    case "transaction-form":
+      transactionForm(button.dataset.type, button.dataset.id || "");
+      break;
+
+    case "full-payment": {
+      const qty = getNumber("tQty");
+      const rate = getNumber("tRate");
+      const total = roundMoney(qty * rate);
+
+      $("tPaid").value = Number.isFinite(total) && total > 0
+        ? total.toFixed(2)
+        : "";
+
+      calculateTransaction();
+      break;
+    }
+
+    case "save-transaction":
+      saveTransaction(button.dataset.type);
+      break;
+
+    case "cash-form":
+      cashForm();
+      break;
+
+    case "save-cash":
+      saveCash();
+      break;
+
+    case "report-month":
+      setMonth();
+      renderReport();
+      break;
+
+    case "export":
+      exportCSV(button.dataset.kind);
+      break;
+
+    case "save-settings":
+      saveSettings();
+      break;
+
+    case "pin-form":
+      pinForm();
+      break;
+
+    case "save-pin":
+      savePin();
+      break;
+
+    case "backup":
+      backup();
+      break;
+
+    case "choose-restore":
+      $("restoreFile").click();
+      break;
+  }
+});
+
+$("overlay").addEventListener("click", event => {
+  if (event.target === $("overlay")) closeSheet();
+});
+
+$("stockSearch").addEventListener("input", renderStock);
+$("partySearch").addEventListener("input", renderLedger);
+$("reportFrom").addEventListener("change", renderReport);
+$("reportTo").addEventListener("change", renderReport);
+$("restoreFile").addEventListener("change", restore);
+
+document.addEventListener("change", event => {
+  if (event.target.id === "tProduct") updateRate();
+});
+
+document.addEventListener("input", event => {
+  if (["tQty", "tRate", "tPaid"].includes(event.target.id)) {
+    calculateTransaction();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Enter" && event.target.id === "loginPin") {
+    login();
+  }
+});
+
+/* ---------- শুরু ---------- */
+
+load();
+
+if (D.pin) {
+  loginScreen();
+} else {
+  setupScreen();
+}
+</script>
+
 </body>
 </html>
